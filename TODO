@@ -1,7 +1,6 @@
 
 
 
-figure out how to test the algorithm without having to have everything else
 figure out how to have tests that don't hit the prod database
 
 
@@ -65,14 +64,17 @@ Get back the interest amount and new total.
 
 ---
 As a user,
-I want the system to calculate the bonus amount (and total),
+I want the system to calculate the match amount (and total),
 So that I don't have to do it myself.
 
 Pass in:
 - the current balance
 - the total amount of any additions that happened since the last checkpoint
-- the bonus settings (minimum, rate, granularity, limit)
-Return the bonus amount and new total.
+- the match settings (minimum, rate, granularity, limit)
+Return the match amount and new total.
 
+
+
+ERROR HANDLING
 
 

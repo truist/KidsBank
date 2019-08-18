@@ -1,0 +1,4 @@
+{
+	secrets => ['some_value']
+	db_file => '/some/path/to/bank.db',
+}

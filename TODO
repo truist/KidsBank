@@ -1,0 +1,78 @@
+
+
+
+figure out how to test the algorithm without having to have everything else
+figure out how to have tests that don't hit the prod database
+
+
+
+deposits and withdrawals can happen at any time
+periodically (weekly), match and interest are added
+
+
+interest & match algorithm:
+	given:
+		starting balance at last checkpoint
+		net changes since then
+	do:
+		calculate match and add it
+		calculate interest and add it
+		respond with the new total
+
+
+configuration choices:
+	match frequency (weekly)
+	match rate ($1 per week with any >$1 deposit)
+		match minimum ($1)
+		match rate (100%)
+		granularity ($1)
+		match limit ($1)
+		only match on net-positive (no)
+	interest frequency (weekly)
+	interest rate (per frequency) ($0.25 per whole $age)
+		fixed amount per age ($0.25 per whole $age)
+		percentage rate (no)
+	interest before or after match (after)
+	interest basis (new balance)
+		new balance (yes)
+		old balance (no)
+		average daily balance (no)
+
+
+features:
+	configure kids
+	keep the balance
+		for one or more kids
+		tally deposits and withdrawals
+		do match & interest calculations (and show what is owed)
+	keep track of "virtual" vs. "physical" balances
+	show the history
+	configure the settings
+	show effective APR
+	show forecasts based on provided variables
+		with pre-configured typical scenarios
+
+
+
+---
+As a user,
+I want the system to calculate the new interest,
+So that I don't have to do it myself.
+
+Pass in the balance, interest rate (amount & basis age).
+Get back the interest amount and new total.
+
+
+---
+As a user,
+I want the system to calculate the bonus amount (and total),
+So that I don't have to do it myself.
+
+Pass in:
+- the current balance
+- the total amount of any additions that happened since the last checkpoint
+- the bonus settings (minimum, rate, granularity, limit)
+Return the bonus amount and new total.
+
+
+

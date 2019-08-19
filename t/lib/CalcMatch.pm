@@ -1,62 +1,53 @@
 package CalcMatch::Test;
 
-use base 'Test::Class';
+use Calc; use base 'Calc::Test';
 
-use Mojo::Base -strict;
-
-use Test::More;
-use Test::Mojo;
-
-sub make_mojo : Tests(startup) {
+sub make_request_json : Tests(setup) {
   my ($self) = @_;
 
-  $self->{t} = Test::Mojo->new('KidsBank');
-}
-
-sub _test_calc {
-  my ($self, $calc_type, $request_json, $expected_result) = @_;
-
-  $self->{t}->post_ok("/calc/$calc_type" => json => $request_json)
-    ->status_is(200)
-    ->content_type_is('application/json;charset=UTF-8')
-    ->json_is($expected_result);
-}
-
-sub _test_match_calc {
-  my ($self, $request_json, $expected_result) = @_;
-
-  $self->_test_calc('match', $request_json, $expected_result);
-}
-
-sub test_match : Test(20) {
-  my ($self) = @_;
-
-  my $request_json = {
-    balance => 27.75,
+  $self->{request_json} = {
     deposit_total => 7.25,
-    match_settings => {
+    settings => {
       rate => 0.5,
       granularity => 1,
       min => 2,
       max => 4,
     }
   };
-
-  $self->_test_match_calc($request_json, { match => 3, new_balance => 30.75 });
-
-  $request_json->{balance} = 28.75;
-  $self->_test_match_calc($request_json, { match => 3, new_balance => 31.75 });
-
-  $request_json->{deposit_total} = 1.5;
-  $self->_test_match_calc($request_json, { match => 0, new_balance => 28.75 });
-
-  $request_json->{deposit_total} = 11.5;
-  $self->_test_match_calc($request_json, { match => 4, new_balance => 32.75 });
-
-  $request_json->{deposit_total} = 7.5;
-  $request_json->{match_settings}->{granularity} = 0.25;
-  $self->_test_match_calc($request_json, { match => 3.75, new_balance => 32.50 });
 }
+
+sub _test_match_calc {
+  my ($self, $value_to_change, $new_value, $expected_match) = @_;
+
+  if ($value_to_change =~ /^settings\/(.+)$/) {
+    $value_to_change = $1;
+    $self->{request_json}->{settings}->{$value_to_change} = $new_value;
+  } else {
+    $self->{request_json}->{$value_to_change} = $new_value;
+  }
+  $self->_test_calc('match', $self->{request_json}, { match => $expected_match });
+}
+
+sub test_basic_case : Test(4) {
+  shift->_test_match_calc('deposit_total', 7.25, 3);
+}
+
+sub test_different_case : Test(4) {
+  shift->_test_match_calc('deposit_total', 4, 2);
+}
+
+sub test_not_enough_deposits : Test(4) {
+  shift->_test_match_calc('deposit_total', 1.5, 0);
+}
+
+sub test_exceed_max : Test(4) {
+  shift->_test_match_calc('deposit_total', 11.5, 4);
+}
+
+sub test_weird_granularity : Test(4) {
+  shift->_test_match_calc('settings/granularity', 0.25, 3.5);
+}
+
 
 1;
 

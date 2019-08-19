@@ -18,32 +18,16 @@ sub match_calc {
   my ($self) = @_;
 
   my $json = $self->req->json;
-  my $settings = $json->{match_settings};
+  my $settings = $json->{settings};
 
   my $match = 0;
   $match = $json->{deposit_total} * $settings->{rate};
-  $match = $match - _remainder($match, $settings->{granularity});
+  $match = int($match / $settings->{granularity}) * $settings->{granularity};
   $match = min($match, $settings->{max});
   $match = 0 if $match < $settings->{min};
 
-  $self->render(json => { match => $match, new_balance => ($json->{balance} + $match) });
+  $self->render(json => { match => $match });
 }
 
-sub _remainder {
-  my ($a, $b) = @_;
-  return 0 unless $b && $a;
-  return $a / $b - int($a / $b);
-}
-
-# $request_json = {
-#   balance => 27.75,
-#   deposit_total => 7.25,
-#   match_settings => {
-#     rate => 0.5,
-#     granularity => 1,
-#     min => 2,
-#     max => 4,
-#   }
-# };
 
 1;

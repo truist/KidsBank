@@ -9,16 +9,6 @@ deposits and withdrawals can happen at any time
 periodically (weekly), match and interest are added
 
 
-interest & match algorithm:
-	given:
-		starting balance at last checkpoint
-		net changes since then
-	do:
-		calculate match and add it
-		calculate interest and add it
-		respond with the new total
-
-
 configuration choices:
 	match frequency (weekly)
 	match rate ($1 per week with any >$1 deposit)
@@ -74,7 +64,9 @@ Pass in:
 Return the match amount and new total.
 
 
-
-ERROR HANDLING
+---
+As a user,
+I want a UI for doing interest calculations,
+So that I can actually tell the computer what calculation I want.
 
 

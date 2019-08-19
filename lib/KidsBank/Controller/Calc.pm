@@ -1,7 +1,7 @@
 package KidsBank::Controller::Calc;
 use Mojo::Base 'Mojolicious::Controller';
 
-use POSIX;
+use POSIX qw(floor);
 use List::Util qw(min);
 
 sub interest {

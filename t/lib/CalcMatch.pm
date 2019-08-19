@@ -7,24 +7,17 @@ sub make_request_json : Tests(setup) {
 
   $self->{request_json} = {
     deposit_total => 7.25,
-    settings => {
-      rate => 0.5,
-      granularity => 1,
-      min => 2,
-      max => 4,
-    }
+    rate => 0.5,
+    granularity => 1,
+    min => 2,
+    max => 4,
   };
 }
 
 sub _test_match_calc {
   my ($self, $value_to_change, $new_value, $expected_match) = @_;
 
-  if ($value_to_change =~ /^settings\/(.+)$/) {
-    $value_to_change = $1;
-    $self->{request_json}->{settings}->{$value_to_change} = $new_value;
-  } else {
-    $self->{request_json}->{$value_to_change} = $new_value;
-  }
+  $self->{request_json}->{$value_to_change} = $new_value;
   $self->_test_calc('match', $self->{request_json}, { match => $expected_match });
 }
 
@@ -45,7 +38,7 @@ sub test_exceed_max : Test(4) {
 }
 
 sub test_weird_granularity : Test(4) {
-  shift->_test_match_calc('settings/granularity', 0.25, 3.5);
+  shift->_test_match_calc('granularity', 0.25, 3.5);
 }
 
 

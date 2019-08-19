@@ -18,13 +18,12 @@ sub match_calc {
   my ($self) = @_;
 
   my $json = $self->req->json;
-  my $settings = $json->{settings};
 
   my $match = 0;
-  $match = $json->{deposit_total} * $settings->{rate};
-  $match = int($match / $settings->{granularity}) * $settings->{granularity};
-  $match = min($match, $settings->{max});
-  $match = 0 if $match < $settings->{min};
+  $match = $json->{deposit_total} * $json->{rate};
+  $match = int($match / $json->{granularity}) * $json->{granularity};
+  $match = min($match, $json->{max});
+  $match = 0 if $match < $json->{min};
 
   $self->render(json => { match => $match });
 }

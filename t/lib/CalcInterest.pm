@@ -1,4 +1,4 @@
-package Calc::Test;
+package CalcInterest::Test;
 
 use base 'Test::Class';
 
@@ -13,8 +13,6 @@ sub make_mojo : Tests(startup) {
   $self->{t} = Test::Mojo->new('KidsBank');
 }
 
-#########
-
 sub _test_calc {
   my ($self, $calc_type, $request_json, $expected_result) = @_;
 
@@ -24,15 +22,7 @@ sub _test_calc {
     ->json_is($expected_result);
 }
 
-sub _test_match_calc {
-  my ($self, $request_json, $expected_result) = @_;
-
-  $self->_test_calc('match', $request_json, $expected_result);
-}
-
-#########
-
-sub make_interest_request_json : Tests(setup) {
+sub make_request_json : Tests(setup) {
   my ($self) = @_;
 
   $self->{request_json} = {
@@ -69,38 +59,6 @@ sub under_age : Test(4) {
   shift->_test_interest_calc('child_age', 30, 0);
 }
 
-
-#########
-
-sub test_match : Test(20) {
-  my ($self) = @_;
-
-  my $request_json = {
-    balance => 27.75,
-    deposit_total => 7.25,
-    match_settings => {
-      rate => 0.5,
-      granularity => 1,
-      min => 2,
-      max => 4,
-    }
-  };
-
-  $self->_test_match_calc($request_json, { match => 3, new_balance => 30.75 });
-
-  $request_json->{balance} = 28.75;
-  $self->_test_match_calc($request_json, { match => 3, new_balance => 31.75 });
-
-  $request_json->{deposit_total} = 1.5;
-  $self->_test_match_calc($request_json, { match => 0, new_balance => 28.75 });
-
-  $request_json->{deposit_total} = 11.5;
-  $self->_test_match_calc($request_json, { match => 4, new_balance => 32.75 });
-
-  $request_json->{deposit_total} = 7.5;
-  $request_json->{match_settings}->{granularity} = 0.25;
-  $self->_test_match_calc($request_json, { match => 3.75, new_balance => 32.50 });
-}
 
 1;
 

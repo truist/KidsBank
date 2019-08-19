@@ -11,7 +11,7 @@ sub interest {
 
   my $interest = floor($json->{balance} / $json->{child_age}) * $json->{amount_per_age_of_balance};
 
-  $self->render(json => { interest => $interest, new_balance => ($json->{balance} + $interest) });
+  $self->render(json => { interest => $interest });
 }
 
 sub match_calc {

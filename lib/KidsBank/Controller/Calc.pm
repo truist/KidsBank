@@ -8,10 +8,14 @@ sub interest {
   my ($self) = @_;
 
   my $json = $self->req->json;
+  if ($json) {
+    my $interest = floor($json->{balance} / $json->{child_age}) * $json->{amount_per_age_of_balance};
 
-  my $interest = floor($json->{balance} / $json->{child_age}) * $json->{amount_per_age_of_balance};
+    $self->render(json => { interest => $interest });
+  } else {
+    $self->render(msg => "Testing from the interest calculator");
+  }
 
-  $self->render(json => { interest => $interest });
 }
 
 sub match_calc {

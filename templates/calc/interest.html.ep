@@ -1,5 +1,5 @@
 % layout 'default';
-% title 'Welcome';
+% title 'Interest Calculator';
 <h2 style="color: green"><%= $msg %></h2>
 <p>
   This page was generated from the template "templates/example/welcome.html.ep"

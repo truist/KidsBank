@@ -1,5 +1,5 @@
 <!DOCTYPE html>
 <html>
   <head><title><%= title %></title></head>
-  <body><%= content %></body>
+  <body style="background-color: black; color: white"><%= content %></body>
 </html>

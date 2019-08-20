@@ -11,6 +11,8 @@ sub startup {
   $r->get('/')->to('example#welcome');
 
   $r->post('/calc/interest')->to('calc#interest');
+  $r->get('/calc/interest')->to('calc#interest');
+
   $r->post('/calc/match')->to('calc#match_calc');
 }
 

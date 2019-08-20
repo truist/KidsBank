@@ -70,3 +70,20 @@ I want a UI for doing interest calculations,
 So that I can actually tell the computer what calculation I want.
 
 
+input form:
+	balance
+	age
+	amount per age
+	submit
+output
+	interest
+	new balance
+
+use the same URL as the JSON
+
+
+---
+make it AJAX
+
+
+

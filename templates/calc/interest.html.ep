@@ -14,3 +14,30 @@
 <p>
 <span style="color: pink">Hi</span> <span style="color: rgb(85, 26, 139)">Benjamin</span>!
 </p>
+
+
+
+
+<script>
+// from https://stackoverflow.com/a/17314644
+jQuery["postJSON"] = function( url, data, callback ) {
+    // shift arguments if data argument was omitted
+    if ( jQuery.isFunction( data ) ) {
+        callback = data;
+        data = undefined;
+    }
+
+    return jQuery.ajax({
+        url: url,
+        type: "POST",
+        contentType:"application/json; charset=utf-8",
+        dataType: "json",
+        data: data,
+        success: callback
+    });
+};
+
+$.postJSON('http://url', {data: 'goes', here: 'yey'}, function (data, status, xhr) {
+    alert('Nailed it!')
+});
+</script>

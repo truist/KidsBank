@@ -39,6 +39,10 @@ sub under_age : Test(4) {
   shift->_test_interest_calc('child_age', 30, 0);
 }
 
+sub rich_kid : Test(4) {
+  shift->_test_interest_calc('balance', 1_000_000, 35_714.25);
+}
+
 
 1;
 

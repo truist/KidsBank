@@ -4,18 +4,41 @@ use Mojo::Base 'Mojolicious::Controller';
 use POSIX qw(floor);
 use List::Util qw(min);
 
+sub _params {
+  my ($self, @names) = @_;
+
+  my @values;
+  foreach my $name (@names) {
+    push(@values, $self->param($name));
+  }
+
+  return @values;
+}
+
 sub interest {
   my ($self) = @_;
 
-  my $json = $self->req->json;
-  if ($json) {
-    my $interest = floor($json->{balance} / $json->{child_age}) * $json->{amount_per_age_of_balance};
-
-    $self->render(json => { interest => $interest });
+  if ('GET' eq $self->req->method) {
+    my ($balance, $age, $amount_per_age) = $self->_params('balance', 'age', 'amount_per_age');
+    if ($balance && $age && $amount_per_age) {
+      # $self->flash(confirmation => "After message");
+      $self->render(msg => $self->_calc_interest($balance, $age, $amount_per_age));
+      # $self->redirect_to('interest');
+    } else {
+      # $self->flash(confirmation => "Before message");
+      $self->render(msg => "Some text passed from the code to the HTML template");
+    }
   } else {
-    $self->render(msg => "Testing from the interest calculator");
+    my $json = $self->req->json;
+    my $interest = $self->_calc_interest($json->{balance}, $json->{child_age}, $json->{amount_per_age});
+    $self->render(json => { interest => $interest });
   }
+}
 
+sub _calc_interest {
+  my ($self, $balance, $age, $amount_per_age) = @_;
+
+  return floor($balance / $age) * $amount_per_age;
 }
 
 sub match_calc {

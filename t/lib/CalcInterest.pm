@@ -8,7 +8,7 @@ sub make_request_json : Tests(setup) {
   $self->{request_json} = {
     balance => 27.75,
     child_age => 7,
-    amount_per_age_of_balance => 0.25
+    amount_per_age => 0.25
   };
 }
 
@@ -28,7 +28,7 @@ sub different_case : Test(4) {
 }
 
 sub odd_amount : Test(4) {
-  shift->_test_interest_calc('amount_per_age_of_balance', 5.35, 16.05);
+  shift->_test_interest_calc('amount_per_age', 5.35, 16.05);
 }
 
 sub zero_balance : Test(4) {

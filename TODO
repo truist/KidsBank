@@ -2,6 +2,7 @@
 
 
 figure out how to have tests that don't hit the prod database
+	or the main local config file
 
 
 
